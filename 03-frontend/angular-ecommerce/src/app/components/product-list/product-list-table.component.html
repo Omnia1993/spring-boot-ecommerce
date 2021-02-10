@@ -1,6 +1,7 @@
 <table class= "table table-hover">
   <thead class="table-dark">
     <tr>
+        <th></th>
       <th>Name</th>
       <th>Price</th>
       <th>Units in Stock</th>
@@ -8,11 +9,12 @@
   </thead>
   <tbody>
     <tr  *ngFor="let temProduct of  products">
-      <td > {{ temProduct.name}}</td>
-      <td>{{ temProduct.unitPrice | currency:'USD'}}</td>
-      <td>{{ temProduct.unitsInStock}}</td>
+      <td class="align-middle">
+       <img src="{{temProduct.imageUrl}}" height="50">   
+      </td>
+        <td class="align-middle" > {{ temProduct.name}}</td>
+      <td class="align-middle">{{ temProduct.unitPrice | currency:'USD'}}</td>
+      <td class="align-middle">{{ temProduct.unitsInStock}}</td>
     </tr>
-    
-
   </tbody>
 </table>

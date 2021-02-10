@@ -20,7 +20,6 @@ return this.httpClient.get<GetResponse>(this.baseUrl).pipe(
 }
 interface GetResponse{
 _embedded:{
-  
  Products:Product[];
 }
 }
