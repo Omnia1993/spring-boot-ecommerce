@@ -12,9 +12,6 @@ public class MyDataRestConfig implements RepositoryRestConfigurer{
     @Override
 
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
-        String pathPatternCors = "/**";
-        cors.addMapping(pathPatternCors).allowCredentials(false).allowedOrigins("*").exposedHeaders("Authorization", "Content-Type");
-
         HttpMethod[] theUnsupportedActions={HttpMethod.PUT,HttpMethod.POST,HttpMethod.DELETE};
         //Disable Http Methods for products:Put,Post And Delete
         config.getExposureConfiguration()
