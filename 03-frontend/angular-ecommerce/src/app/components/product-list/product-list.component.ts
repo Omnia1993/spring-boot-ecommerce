@@ -28,7 +28,7 @@ export class ProductListComponent implements OnInit {
       this.currentCategoryId = +this.route.snapshot.paramMap.get('id');
     }
     else{
-      // not category id available ....defult to category 1
+      // not category id available ....defult to category id 1
       this.currentCategoryId=1;
     }
     //now get the products for the given category id
