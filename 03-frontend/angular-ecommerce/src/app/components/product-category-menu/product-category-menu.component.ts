@@ -8,19 +8,20 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-category-menu.component.css']
 })
 export class ProductCategoryMenuComponent implements OnInit {
-productCategories :ProductCategory[];
-  constructor(private productServise :ProductService) { }
+  productCategories: ProductCategory[];
+  constructor(private productService: ProductService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.listProductCategories();
   }
+  
   listProductCategories() {
-    this.productServise.getProductCategories().subscribe(
-data=>{
+    this.productService.getProductCategories().subscribe(
+      data => {
 
-  console.log('ProductCategories ='+JSON.stringify(data));
-  this.productCategories=data;
-});
+        console.log('ProductCategories =' + JSON.stringify(data));
+        this.productCategories = data;
+      }
+    );
   }
-
 }

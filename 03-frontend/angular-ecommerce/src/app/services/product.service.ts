@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Product } from '../common/product';
 import { map } from 'rxjs/operators';
+import { ProductCategory } from '../common/product-category';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
+
   private baseUrl = 'http://localhost:8080/api/Products'
+  private categoryUrl = 'http://localhost:8080/api/product-category'
   constructor(private httpClient: HttpClient) { }
 
 
@@ -16,15 +19,24 @@ export class ProductService {
     //@TODO :need to build URL based on category id...will come back to this later!
     //I am doing the work now
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
-    return this.httpClient.get<GetResponse>(searchUrl).pipe(
+    return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(
       map(response => response._embedded.P)
-      
+
+    );
+  }
+  getProductCategories(): Observable<ProductCategory[]> {
+    return this.httpClient.get<GetResponseProductCategory>(this.categoryUrl).pipe(
+      map(response => response._embedded.omnia)
       );
   }
-
 }
-interface GetResponse {
+interface GetResponseProducts {
   _embedded: {
     P: Product[];
+  }
+}
+interface GetResponseProductCategory {
+  _embedded: {
+    omnia: ProductCategory[];
   }
 }
