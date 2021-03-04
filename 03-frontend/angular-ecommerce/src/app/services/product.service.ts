@@ -39,4 +39,5 @@ interface GetResponseProductCategory {
   _embedded: {
     omnia: ProductCategory[];
   }
+
 }
