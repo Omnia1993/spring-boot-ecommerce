@@ -9,15 +9,17 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  products: Product[]=[];
+  products: Product[] = [];
   currentCategoryId: number = 1;
   previousCategoryId: number = 1;
   searchMode: boolean = false;
 
   //new properties for pagination
   thePageNumber: number = 1;
-  thePageSize: number = 10;
+  thePageSize: number = 5;
   theTotalElements: number = 0;
+  perviousKeyWord = null;
+
   constructor(private productService: ProductService,
     private route: ActivatedRoute) { }
 
@@ -38,12 +40,24 @@ export class ProductListComponent implements OnInit {
 
   handleSearchProducts() {
     const theKeyWord: string = this.route.snapshot.paramMap.get('keyword');
+    
+    // if we have diffrent keyword than previous
+    // then set thePageNumber to 1
+    
+    if (this.perviousKeyWord != theKeyWord) {
+      this.thePageNumber = 1;
+    }
+    this.perviousKeyWord = theKeyWord;
+    console.log(`keyword=${theKeyWord},thePageNumber=${this.thePageNumber}`)
+
     //now search for the products using keyword
-    this.productService.searchProducts(theKeyWord).subscribe(
-      data => {
-        this.products = data;
-      }
-    )
+    this.productService.searchProductsPaginate(this.thePageNumber - 1,
+      this.thePageSize,
+      theKeyWord).subscribe(this.processResult());                                        
+                                            
+                                                  
+    
+    
   }
   handleListProducts() {
 
@@ -56,29 +70,31 @@ export class ProductListComponent implements OnInit {
     else {
       // not category id available ....defult to category id 1
       this.currentCategoryId = 1;
-      //
-      //check if we have a diffrent category id  than pervious
-      //Note: Angular will reuse a component if its currently being viewed
-
-
-      //if we have a diffrent category id than previous
-      //then set the pageNumber back to 1
-
-      if (this.previousCategoryId != this.currentCategoryId)
-        this.thePageNumber = 1;
-
-      this.previousCategoryId = this.currentCategoryId;
-      console.log(`currentCategoryId=${this.currentCategoryId},thePageNumber=${this.thePageNumber}`);
-
-
-      //now get the products for the given category id
-      this.productService.getProductListPaginate(this.thePageNumber - 1,
-                                               this.thePageSize,
-                                               this.currentCategoryId)
-                                               .subscribe(this.processResult());
-
     }
+    //
+    //check if we have a diffrent category id  than pervious
+    //Note: Angular will reuse a component if its currently being viewed
+
+
+    //if we have a diffrent category id than previous
+    //then set the pageNumber back to 1
+
+    if (this.previousCategoryId != this.currentCategoryId) {
+      this.thePageNumber = 1;
+    }
+    this.previousCategoryId = this.currentCategoryId;
+    console.log(`currentCategoryId=${this.currentCategoryId},thePageNumber=${this.thePageNumber}`);
+
+
+    //now get the products for the given category id
+    this.productService.getProductListPaginate(this.thePageNumber - 1,
+      this.thePageSize,
+      this.currentCategoryId)
+      .subscribe(this.processResult());
+
+
   }
+
   processResult() {
     return data => {
       this.products = data._embedded.P;
@@ -86,7 +102,18 @@ export class ProductListComponent implements OnInit {
       this.thePageSize = data.page.size;
       this.theTotalElements = data.page.totalElements;
     };
-
+  }
+  updatePageSize(pageSize: number) {
+    this.thePageSize = pageSize;
+    this.thePageNumber = 1;
+    this.listProducts();
 
   }
+
+  addToCart(theProduct: Product) {
+    console.log(`Adding to cart :${theProduct.name}, ${theProduct.unitPrice}`);
+    
+    //TODO ---do real Work
+  }
+
 }

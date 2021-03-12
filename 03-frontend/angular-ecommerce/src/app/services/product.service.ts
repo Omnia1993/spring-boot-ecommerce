@@ -42,6 +42,17 @@ export class ProductService {
     return this.getProducts(searchUrl);
   }
 
+  searchProductsPaginate(thePage: number,
+                       thePageSize: number,
+                       theKeyWord: string): Observable<GetResponseProducts> {
+    //need to build URL based on keyWord,page and size
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyWord}`
+                    + `&page=${thePage}&size=${thePageSize}`;
+    return this.httpClient.get<GetResponseProducts>(searchUrl);
+  }
+
+
+
   private getProducts(searchUrl: string): Observable<Product[]> {
     return this.httpClient.get<GetResponseProducts>(searchUrl).pipe(
       map(response => response._embedded.P)
@@ -54,6 +65,9 @@ export class ProductService {
       map(response => response._embedded.omnia)
       );
   }
+
+
+
 }
 interface GetResponseProducts {
   _embedded: {
