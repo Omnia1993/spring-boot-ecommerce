@@ -6,7 +6,7 @@ import { CartItem } from '../common/cart-item';
   providedIn: 'root'
 })
 export class CartService {
-  cartItems: CartItem[];
+  cartItems: CartItem[]=[];
 
   totalPrice: Subject<number> = new Subject<number>();
   totalQuantity: Subject<number> = new Subject<number>();
@@ -21,13 +21,8 @@ export class CartService {
 
     if (this.cartItems.length > 0) {
       // find the item in the cart based on item id
-
-      for (let temCartItem of this.cartItems)
-        if (temCartItem.id == theCartItem.id) {
-          existingCartItem = temCartItem;
-          break;
-
-        }
+     existingCartItem=this.cartItems.find(temCartItem => temCartItem.id===theCartItem.id)
+     
       //check if we found it 
       alreadyExistsInCart = (existingCartItem != undefined)
     }
