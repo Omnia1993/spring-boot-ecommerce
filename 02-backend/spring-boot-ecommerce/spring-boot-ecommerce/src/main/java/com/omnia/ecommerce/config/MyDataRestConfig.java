@@ -1,7 +1,9 @@
 package com.omnia.ecommerce.config;
 
+import com.omnia.ecommerce.entity.Country;
 import com.omnia.ecommerce.entity.Product;
 import com.omnia.ecommerce.entity.ProductCategory;
+import com.omnia.ecommerce.entity.State;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -28,19 +30,28 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
     public void configureRepositoryRestConfiguration(RepositoryRestConfiguration config, CorsRegistry cors) {
         HttpMethod[] theUnsupportedActions = {HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE};
         //Disable Http Methods for products:Put,Post And Delete
-        config.getExposureConfiguration()
-                .forDomainType(Product.class)
-                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+        disableHttpMethods(Product.class,config, theUnsupportedActions);
 
         //Disable Http Methods for productCategory:Put,Post And Delete
-        config.getExposureConfiguration()
-                .forDomainType(ProductCategory.class)
-                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
-                .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
+        disableHttpMethods(ProductCategory.class,config, theUnsupportedActions);
+
+        //Disable Http Methods for Country:Put,Post And Delete
+        disableHttpMethods(Country.class,config, theUnsupportedActions);
+
+        //Disable Http Methods for state:Put,Post And Delete
+        disableHttpMethods(State.class,config, theUnsupportedActions);
+
+
 
 //call an internal helper method
         exposeIds(config);
+    }
+
+    private void disableHttpMethods(Class theClass,RepositoryRestConfiguration config, HttpMethod[] theUnsupportedActions) {
+        config.getExposureConfiguration()
+                .forDomainType(theClass)
+                .withItemExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions))
+                .withCollectionExposure((metadata, httpMethods) -> httpMethods.disable(theUnsupportedActions));
     }
 
     private void exposeIds(RepositoryRestConfiguration config) {

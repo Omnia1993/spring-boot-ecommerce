@@ -15,8 +15,8 @@ export class Luv2ShopFormService {
     // build an array fo "month" dropdown list untill month 12
     //- start at current month and loop until month 12 
 
-    for (startMonth; startMonth <= 12; startMonth++) {
-      data.push(startMonth)
+    for (let theMonth=startMonth; theMonth <= 12; theMonth++) {
+      data.push(theMonth)
     }
     return of(data);
 
